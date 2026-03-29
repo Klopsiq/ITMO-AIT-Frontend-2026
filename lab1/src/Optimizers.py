@@ -13,7 +13,6 @@ def _to_cn_array(x, epsilon):
 
 def gradient_descent(func_obj, x0, lr=0.01, max_iter=1000, tol=1e-8,
                      use_cn=False, cn_epsilon=None):
-    """Градиентный спуск (метод 1-го порядка)."""
     history = {'x': [], 'f': [], 'grad_norm': [], 'epsilon': [], 'time': []}
     t0 = time.time()
 
@@ -57,7 +56,6 @@ def gradient_descent(func_obj, x0, lr=0.01, max_iter=1000, tol=1e-8,
 def nelder_mead(func_obj, x0, max_iter=2000, tol=1e-10,
                 use_cn=False, cn_epsilon=None,
                 alpha=1.0, gamma=2.0, rho=0.5, sigma=0.5):
-    """Метод деформируемого многогранника Нелдера-Мида (метод 0-го порядка)."""
     n = len(x0)
     history = {'x': [], 'f': [], 'epsilon': [], 'time': []}
     t0 = time.time()
@@ -70,7 +68,6 @@ def nelder_mead(func_obj, x0, max_iter=2000, tol=1e-10,
             return float(result), f_eps
         return float(func_obj.func(point)), 0.0
 
-    # Инициализация симплекса
     simplex = [np.array(x0, dtype=float)]
     for i in range(n):
         point = np.array(x0, dtype=float)
@@ -83,7 +80,6 @@ def nelder_mead(func_obj, x0, max_iter=2000, tol=1e-10,
         f_values.append(fv)
 
     for iteration in range(max_iter):
-        # Сортировка вершин по значению функции
         order = np.argsort(f_values)
         simplex = [simplex[i] for i in order]
         f_values = [f_values[i] for i in order]
@@ -95,14 +91,11 @@ def nelder_mead(func_obj, x0, max_iter=2000, tol=1e-10,
         history['epsilon'].append(f_eps)
         history['time'].append(time.time() - t0)
 
-        # Критерий остановки
         if np.std(f_values) < tol:
             break
 
-        # Центроид без худшей точки
         centroid = np.mean(simplex[:-1], axis=0)
 
-        # Отражение
         xr = centroid + alpha * (centroid - simplex[-1])
         fr, _ = eval_f(xr)
 
@@ -110,7 +103,6 @@ def nelder_mead(func_obj, x0, max_iter=2000, tol=1e-10,
             simplex[-1] = xr
             f_values[-1] = fr
         elif fr < f_values[0]:
-            # Растяжение
             xe = centroid + gamma * (xr - centroid)
             fe, _ = eval_f(xe)
             if fe < fr:
@@ -120,14 +112,12 @@ def nelder_mead(func_obj, x0, max_iter=2000, tol=1e-10,
                 simplex[-1] = xr
                 f_values[-1] = fr
         else:
-            # Сжатие
             xc = centroid + rho * (simplex[-1] - centroid)
             fc, _ = eval_f(xc)
             if fc < f_values[-1]:
                 simplex[-1] = xc
                 f_values[-1] = fc
             else:
-                # Глобальное сжатие
                 for i in range(1, len(simplex)):
                     simplex[i] = simplex[0] + sigma * (simplex[i] - simplex[0])
                     f_values[i], _ = eval_f(simplex[i])
@@ -137,7 +127,6 @@ def nelder_mead(func_obj, x0, max_iter=2000, tol=1e-10,
 
 def newton_method(func_obj, x0, max_iter=200, tol=1e-8,
                   use_cn=False, cn_epsilon=None):
-    """Метод Ньютона (метод 2-го порядка)."""
     history = {'x': [], 'f': [], 'grad_norm': [], 'epsilon': [], 'time': []}
     t0 = time.time()
 
@@ -170,11 +159,9 @@ def newton_method(func_obj, x0, max_iter=200, tol=1e-8,
         if np.linalg.norm(g_float) < tol:
             break
 
-        # Шаг Ньютона: dx = -H^{-1} g
         try:
             dx = -np.linalg.solve(H, g_float)
         except np.linalg.LinAlgError:
-            # Регуляризация при вырожденном гессиане
             H_reg = H + 1e-6 * np.eye(len(g_float))
             dx = -np.linalg.solve(H_reg, g_float)
 

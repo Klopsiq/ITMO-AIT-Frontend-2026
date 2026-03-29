@@ -1,8 +1,4 @@
 class ConstructiveNumber:
-    """
-    Конструктивное число — пара (a, b) ∈ Q, представляющая интервал [a, b].
-    Действительное число x лежит где-то в [a, b], точность ε = b - a.
-    """
 
     def __init__(self, a, b=None, *, epsilon=None):
         if b is not None and epsilon is None:
@@ -14,7 +10,7 @@ class ConstructiveNumber:
             self.a = x - eps / 2
             self.b = x + eps / 2
         else:
-            raise ValueError("Укажите либо (a, b), либо (x, epsilon=ε)")
+            raise ValueError("Укажите либо (a, b), либо (x, epsilon=e)")
         if self.a > self.b:
             self.a, self.b = self.b, self.a
 
@@ -23,7 +19,6 @@ class ConstructiveNumber:
         return self.b - self.a
 
     def value(self, alpha=0.5):
-        """Получить действительное число: alpha=0 → a, alpha=1 → b."""
         if not 0 <= alpha <= 1:
             raise ValueError("alpha должен быть в [0, 1]")
         return self.a * (1 - alpha) + self.b * alpha
@@ -36,8 +31,6 @@ class ConstructiveNumber:
             v = float(other)
             return ConstructiveNumber(v, v)
         raise TypeError(f"Неподдерживаемый тип: {type(other)}")
-
-    # --- Арифметика (интервальная) ---
 
     def __add__(self, other):
         o = self._to_cn(other)
@@ -93,8 +86,6 @@ class ConstructiveNumber:
             result = result * self
         return result
 
-    # --- Сравнение ---
-
     def __eq__(self, other):
         o = self._to_cn(other)
         return self.a == o.a and self.b == o.b
@@ -114,8 +105,6 @@ class ConstructiveNumber:
     def __ge__(self, other):
         o = self._to_cn(other)
         return self.a >= o.b
-
-    # --- Представление ---
 
     def __str__(self):
         return f"[{self.a:.6f}, {self.b:.6f}]"

@@ -3,7 +3,6 @@ from src.ConstructiveNumber import ConstructiveNumber
 
 
 class BlackBox:
-    """Базовый класс для чёрных ящиков функций."""
 
     def __init__(self):
         self._func_calls = 0
@@ -50,7 +49,6 @@ class BlackBox:
 
 
 def _make_spd_matrix(eigenvalues, seed=42):
-    """Создать симметричную положительно определённую матрицу с заданными собственными значениями."""
     n = len(eigenvalues)
     rng = np.random.RandomState(seed)
     Q, _ = np.linalg.qr(rng.randn(n, n))
@@ -58,9 +56,6 @@ def _make_spd_matrix(eigenvalues, seed=42):
 
 
 class QuadraticGoodCond(BlackBox):
-    """Квадратичная 6-арная функция, число обусловленности ≈ 1.16.
-    f(x) = 0.5 * x^T A x + b^T x + c
-    """
 
     def __init__(self):
         super().__init__()
@@ -77,7 +72,7 @@ class QuadraticGoodCond(BlackBox):
 
     @property
     def name(self):
-        return f"Квадратичная 6D (cond ≈ {self._cond:.2f})"
+        return f"Квадратичная 6D (cond = {self._cond:.2f})"
 
     @property
     def minimum(self):
@@ -114,9 +109,6 @@ class QuadraticGoodCond(BlackBox):
 
 
 class QuadraticBadCond(BlackBox):
-    """Квадратичная 4-арная функция, число обусловленности ≈ 100.
-    f(x) = 0.5 * x^T A x + b^T x + c
-    """
 
     def __init__(self):
         super().__init__()
@@ -133,7 +125,7 @@ class QuadraticBadCond(BlackBox):
 
     @property
     def name(self):
-        return f"Квадратичная 4D (cond ≈ {self._cond:.0f})"
+        return f"Квадратичная 4D (cond = {self._cond:.0f})"
 
     @property
     def minimum(self):
@@ -170,9 +162,6 @@ class QuadraticBadCond(BlackBox):
 
 
 class Rosenbrock(BlackBox):
-    """Функция Розенброка 3-арная.
-    f(x) = Σ [100*(x_{i+1} - x_i²)² + (1 - x_i)²]
-    """
 
     def __init__(self):
         super().__init__()
