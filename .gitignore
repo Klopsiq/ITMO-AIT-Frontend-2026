@@ -3,6 +3,7 @@ node_modules/
 dist/
 dbs/
 __pycache__/
+.venv/
 static/
 media/
 celerybeat-schedule
