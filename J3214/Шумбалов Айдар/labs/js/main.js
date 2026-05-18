@@ -12,7 +12,6 @@ document.addEventListener('DOMContentLoaded', function () {
   if (loginForm) {
     loginForm.addEventListener('submit', function (e) {
       e.preventDefault();
-      // Имитация успешного входа — редирект на дашборд
       window.location.href = 'dashboard.html';
     });
   }
@@ -30,16 +29,15 @@ document.addEventListener('DOMContentLoaded', function () {
       const errorEl = document.getElementById('passwordError');
 
       if (password !== confirm) {
-        errorEl.classList.remove('d-none');
+        if (errorEl) errorEl.classList.remove('d-none');
         document.getElementById('regPassword').classList.add('is-invalid');
         document.getElementById('regConfirm').classList.add('is-invalid');
         return;
       }
       if (errorEl) errorEl.classList.add('d-none');
 
-      // Показываем модалку успеха
-      const modal = new bootstrap.Modal(document.getElementById('successModal'));
-      modal.show();
+      alert('Аккаунт создан. Теперь можно войти.');
+      window.location.href = 'login.html';
     });
 
     // Сброс ошибки при вводе
@@ -102,6 +100,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     if (noResults) {
+      noResults.classList.toggle('d-none', visible !== 0);
       noResults.style.display = visible === 0 ? '' : 'none';
     }
   }
@@ -123,6 +122,13 @@ document.addEventListener('DOMContentLoaded', function () {
       if (allPrice) allPrice.checked = true;
       if (searchInput) searchInput.value = '';
       filterCourses();
+    });
+  }
+
+  const resetFiltersSecondary = document.getElementById('resetFilters2');
+  if (resetFiltersSecondary && resetFilters) {
+    resetFiltersSecondary.addEventListener('click', function () {
+      resetFilters.click();
     });
   }
 
@@ -178,6 +184,7 @@ document.addEventListener('DOMContentLoaded', function () {
       if (!text) return;
 
       const list = document.getElementById('commentsList');
+      if (!list) return;
       const now = new Date().toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' });
       const item = document.createElement('div');
       item.className = 'comment-item';
@@ -200,7 +207,7 @@ document.addEventListener('DOMContentLoaded', function () {
   let deletingRow = null;
   document.querySelectorAll('.delete-course').forEach(function (btn) {
     btn.addEventListener('click', function () {
-      deletingRow = btn.closest('tr');
+      deletingRow = btn.closest('tr') || btn.closest('.col-md-6');
       const modal = new bootstrap.Modal(document.getElementById('deleteModal'));
       modal.show();
     });
@@ -233,7 +240,10 @@ document.addEventListener('DOMContentLoaded', function () {
   document.querySelectorAll('.edit-course').forEach(function (btn) {
     btn.addEventListener('click', function () {
       const row = btn.closest('tr');
-      const title = row.querySelector('.course-title-cell') ? row.querySelector('.course-title-cell').textContent : '';
+      const card = btn.closest('.card');
+      const titleFromTable = row && row.querySelector('.course-title-cell') ? row.querySelector('.course-title-cell').textContent : '';
+      const titleFromCard = card && card.querySelector('.card-title') ? card.querySelector('.card-title').textContent : '';
+      const title = titleFromTable || titleFromCard;
       document.getElementById('courseFormTitle').textContent = 'Редактировать курс';
       const nameInput = document.getElementById('courseName');
       if (nameInput) nameInput.value = title.trim();

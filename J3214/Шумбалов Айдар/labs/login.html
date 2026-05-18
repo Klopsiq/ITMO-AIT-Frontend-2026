@@ -11,18 +11,18 @@
 
 <div class="auth-page">
   <div class="auth-card">
-    <div style="font-size: 2.5rem; text-align: center">🎓</div>
+    <div class="auth-icon">🎓</div>
     <h2>Omagad</h2>
     <p class="subtitle">Платформа онлайн-обучения</p>
 
     <form id="loginForm">
       <div class="mb-3">
-        <label class="form-label">Email</label>
+        <label class="form-label" for="email">Email</label>
         <input type="email" class="form-control" id="email" placeholder="you@example.com" required />
       </div>
 
       <div class="mb-3">
-        <label class="form-label">Пароль</label>
+        <label class="form-label" for="password">Пароль</label>
         <input type="password" class="form-control" id="password" placeholder="Введите пароль" required />
       </div>
 
@@ -40,12 +40,6 @@
   </div>
 </div>
 
-<script>
-  document.getElementById('loginForm').addEventListener('submit', function (e) {
-    e.preventDefault();
-    window.location.href = 'dashboard.html';
-  });
-</script>
-
+<script src="js/main.js"></script>
 </body>
 </html>

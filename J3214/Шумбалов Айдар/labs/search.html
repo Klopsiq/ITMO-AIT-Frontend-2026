@@ -390,14 +390,5 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="js/main.js"></script>
-<script>
-  // Второй сброс фильтров (кнопка в блоке «нет результатов»)
-  const r2 = document.getElementById('resetFilters2');
-  if (r2) r2.addEventListener('click', function () {
-    document.getElementById('resetFilters').click();
-  });
-  // Прячем блок «нет результатов» изначально
-  document.getElementById('noResults').classList.add('d-none');
-</script>
 </body>
 </html>
